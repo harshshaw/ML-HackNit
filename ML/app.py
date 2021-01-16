@@ -2,7 +2,9 @@ from flask import Flask,request
 import joblib
 import pickle
 import numpy as np
+from flask_cors import CORS
 app=Flask(__name__)
+CORS(app)
 model2=joblib.load("ML\\review.pkl")
 
 model=joblib.load("ML\startup.pkl")
@@ -29,7 +31,7 @@ def reviews():
     data=request.form
 
     if request.method=='POST':
-        text=str(data['text'])
+        text=str(data.getlist['text'])
         predict2=str(model2.predict([text])[0])
         return {"review":predict2}
     else:
