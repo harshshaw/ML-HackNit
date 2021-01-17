@@ -31,11 +31,24 @@ def reviews():
     data=request.form
 
     if request.method=='POST':
-        text=str(data.getlist['text'])
-        predict2=str(model2.predict([text])[0])
-        return {"review":predict2}
-    else:
-        return 0
+        text=data.getlist("text")
+        result=[]
+        positive=0
+        negative=0
+        for x in text:
+            predict2=str(model2.predict([x])[0])
+            result.append(predict2)
+    size=len(result)
+    for check in result:
+        if check=='positive':
+            positive+=1
+        if check =='negative':
+            negative+=1
+    positive_percentage=positive/size*100
+    negative_percentage=negative/size*100
+    return {"review":result,"positive_percentage":positive_percentage,"negatie_percentage":negative_percentage}
+    
+   
 
 
 loaded_model=pickle.load(open("ML/finalized_model.sav","rb"))
